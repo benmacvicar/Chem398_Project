@@ -501,7 +501,7 @@ class PumpInterface(object):
         return self._get_raw_response(command)['data']
 
     def _send(self, command):
-        self.ser.write(command + self.CR)
+        self.ser.write(encode(command + self.CR))
 
 class PumpInterfaceNET(PumpInterface): 
     '''
