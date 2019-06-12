@@ -119,7 +119,7 @@ class PumpInterface(object):
     # 19200.  These are actually the default parameters when calling the command
     # to init the serial port, but I define them here for clarity (especially if
     # they ever change in the future).
-    CONNECTION_SETTINGS = dict(baudrate=19200, bytesize=8, parity='N',
+    CONNECTION_SETTINGS = dict(baudrate=9600, bytesize=8, parity='N',
             stopbits=1, timeout=.05, xonxoff=0, rtscts=0, writeTimeout=1,
             dsrdtr=None, interCharTimeout=None)
 
@@ -193,7 +193,7 @@ class PumpInterface(object):
     #####################################################################
 
     def __init__(self, start_trigger='rising', stop_trigger='falling',
-            volume_unit='ml', rate_unit='ml/min', port=0):
+            volume_unit='ml', rate_unit='ml/min', port='COM4'):
 
         self._port = port
         self.connect()
