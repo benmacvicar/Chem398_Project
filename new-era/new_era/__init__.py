@@ -459,7 +459,7 @@ class PumpInterface(object):
         # https://sourceforge.net/tracker/?func=detail&atid=446302&aid=3101783&group_id=46487 
         result = []
         while 1:
-            last = self.ser.read(1)
+            last = self.ser.read()
             result.append(last)
             if last == self.ETX or last == '':
                 break
