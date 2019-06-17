@@ -1,12 +1,18 @@
 from userInterfaceAndInput import GUI
-from userInterfaceAndInput import graph
 from serialCommunication import getPort
 from serialCommunication import Pump
+from serialCommunication import destroyPrompt
 
 port = getPort()
-pump = Pump(port)
+pump = Pump(port[0])
+destroyPrompt(port[1])
 
-if pump.isOpen()
-	myGUI = GUI()
+if pump.checkConnection():
+	myGUI = GUI(pump)
 	
+	
+else:
+	#pump.errorMessage()
+	myGUI = GUI(pump)
 
+	
