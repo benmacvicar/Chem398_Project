@@ -48,7 +48,7 @@ class Pump:
 			self.ser.write(phase.encode())
 			self.ser.write(fun_rat.encode())
 			self.ser.write(rate_cmd.encode())
-            self.ser.write('VOLMM\x0D'.encode())
+			self.ser.write('VOLMM\x0D'.encode())
 			self.ser.write(vol_cmd.encode())
 			self.ser.write('DIR WDR'.encode())
 			i = i+1

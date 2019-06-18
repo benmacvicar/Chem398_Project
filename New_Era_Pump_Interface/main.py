@@ -8,12 +8,8 @@ pump = Pump(port[0])
 destroyPrompt(port[1])
 
 if pump.checkConnection():
-   try:
-     myGUI = GUI(pump)
-   catch:
-        
+	myGUI = GUI(pump)
 
-	
 else:
 	pump.errorMessage()
 	
