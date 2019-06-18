@@ -44,10 +44,11 @@ class Pump:
 			fun_rat = 'FUN RAT\x0D'
 			phase = f'PHN {i}\x0D'
 			rate_cmd = f'RAT {rate} MM\x0D'
-			vol_cmd = f'VOL {vol} MM\x0D'
+			vol_cmd = f'VOL{vol}\x0D'
 			self.ser.write(phase.encode())
 			self.ser.write(fun_rat.encode())
 			self.ser.write(rate_cmd.encode())
+            self.ser.write('VOLMM\x0D'.encode())
 			self.ser.write(vol_cmd.encode())
 			self.ser.write('DIR WDR'.encode())
 			i = i+1
