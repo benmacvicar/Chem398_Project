@@ -1,13 +1,16 @@
 from serialCommunication import Pump
-#from userInterfaceAndInput import GUI
+from cameraControl import takePic
 from tkinter import Toplevel
 from tkinter import *
 import time
+import os
 
 class Timer:
 	def __init__(self,pump,rate_vol_pairs,times,master):
 		self.root = Toplevel(master)
-		#self.pump.sendRun(self.gui.rate_vol_pairs)
+		#Check file path and make directories
+		self.path = "C:\\Users\\Ben\\Documents\\Experiments"+"\\"+time.asctime().replace(":","-")
+		self.pump.sendRun(rate_vol_pairs)
 		self.root.geometry("400x200")
 		self.start_time = time.time()
 		self.on = True
@@ -25,7 +28,7 @@ class Timer:
 		pb.place(x=25,y=100)
 		rb.place(x=150,y=100)
 		q.place(x=300,y=100)
-		
+		os.mkdir(path)
 
 		self.Update()
 		self.root.mainloop()
@@ -46,16 +49,14 @@ class Timer:
 	def Pause(self):
 		self.on = False
 		self.pause_time = time.time()
-		print('Pause')
+		self.pump.Pause()
 	def Resume(self):
 		
 		if self.on is False:
 			self.on = True
 			timePaused = time.time()- self.pause_time
 			self.Update(timePaused)
-			print('Run')
-
-
+			self.pump.Resume()
 def Run(pump,rate_vol_pairs,times,master):
 
 	timer = Timer(pump,rate_vol_pairs,times,master)

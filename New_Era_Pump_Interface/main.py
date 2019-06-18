@@ -9,10 +9,10 @@ destroyPrompt(port[1])
 
 if pump.checkConnection():
 	myGUI = GUI(pump)
-	
+
 	
 else:
-	#pump.errorMessage()
-	myGUI = GUI(pump)
+	pump.errorMessage()
+	
 
 	
