@@ -11,7 +11,8 @@ class Timer:
 		#Check file path and make directories
 		self.path = "C:\\Users\\dkhlab\\Documents\\Experiments"+"\\"+time.asctime().replace(":","-")
 		self.pump = pump
-		self.pump.sendRun(rate_vol_pairs)
+		self.rate_vol_pairs =rate_vol_pairs
+		self.pump.sendRun(self.rate_vol_pairs)
 		self.root.geometry("400x200")
 		self.start_time = time.time()
 		self.on = True

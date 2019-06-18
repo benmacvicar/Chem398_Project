@@ -18,7 +18,8 @@ class Pump:
 		
 		self.port = "COM%d" % portNumber
 		try:
-			ser = serial.Serial(self.port, 9600, timeout = .5)
+			ser = serial.Serial(self.port, 9600,timeout = .5)
+			ser.write('RESET\x0D'.encode())
 		except:
 			self.status = False
 		else:
@@ -26,6 +27,8 @@ class Pump:
 			self.status = ser.isOpen()
 
 
+	def exit(self):
+		self.ser.close()
 
 	def checkConnection(self):
 		return self.status
@@ -37,10 +40,9 @@ class Pump:
 		
 	def sendRun(self,rate_vol_pairs):
 		i = 1
-		self.ser.write('RESET\x0D'.encode())
 		for pair in rate_vol_pairs:
-			rate = rate_vol_pairs[0]
-			vol = rate_vol_pairs[1]
+			rate = pair[0]
+			vol = pair[1]
 			fun_rat = 'FUN RAT\x0D'
 			phase = f'PHN {i}\x0D'
 			rate_cmd = f'RAT {rate} MM\x0D'
@@ -52,8 +54,9 @@ class Pump:
 			self.ser.write(vol_cmd.encode())
 			self.ser.write('DIR WDR'.encode())
 			i = i+1
+			print(f"loop{i}")
 		self.ser.write('RUN\x0D'.encode())
-
+		print('ran')
 	def Pause(self):
 		self.ser.write('STP\x0D'.encode())
 

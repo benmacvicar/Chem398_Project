@@ -52,7 +52,7 @@ class GUI:
 			
 
 
-			q=Button(self.master, text='Quit Program', command=sys.exit)
+			q=Button(self.master, text='Quit Program', command=self.destroyer)
 			s=Button(self.master, text='Graph', command=self.Show)
 
 			q.grid(row=2*num+2, column=0, sticky=W, pady=4)
@@ -60,7 +60,11 @@ class GUI:
 			
 			self.master.deiconify()
 			mainloop()
-			
+	
+	def destroyer(self):
+		self.pump.exit()
+		sys.exit()
+
 	def Show(self):
 		volume = float(self.volumeInput.get())
 		rate_time_pairs=list()
@@ -69,8 +73,6 @@ class GUI:
 		run_time = 0
 		self.times.append(0)
 		for item in self.inputs:
-			print(volume)
-			print(item[0].get())	
 			flowRate = float(item[0].get())
 			time = float(item[1].get())
 			run_time = run_time + time 
@@ -85,6 +87,7 @@ class GUI:
 		self.rate_time_pairs = rate_time_pairs
 		self.volume_time_pairs = volume_time_pairs
 		self.result = Check(self.volume,self.volumes)
+		print(self.rate_vol_pairs)
 		Graph(self)
 
 	def Start(self):
@@ -138,7 +141,6 @@ def Graph(gui):
 			t = t+pair[1]
 			x.append(t)
 			y.append(pair[0])
-			print(pair)
 			
 		f = Figure(figsize=(5,5))
 		sub = f.add_subplot(111)
