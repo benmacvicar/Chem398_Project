@@ -9,8 +9,8 @@ class Timer:
 	def __init__(self,pump,rate_vol_pairs,times,master):
 		self.root = Toplevel(master)
 		#Check file path and make directories
-		self.path = "C:\\Users\\Ben\\Documents\\Experiments"+"\\"+time.asctime().replace(":","-")
-		self.pump.sendRun(rate_vol_pairs)
+		self.path = "C:\\Users\\dkhlab\\Documents\\Experiments"+"\\"+time.asctime().replace(":","-")
+		pump.sendRun(rate_vol_pairs)
 		self.root.geometry("400x200")
 		self.start_time = time.time()
 		self.on = True
@@ -50,6 +50,7 @@ class Timer:
 		self.on = False
 		self.pause_time = time.time()
 		self.pump.Pause()
+		takePic()
 	def Resume(self):
 		
 		if self.on is False:

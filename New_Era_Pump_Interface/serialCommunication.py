@@ -37,7 +37,7 @@ class Pump:
 		
 	def sendRun(self,rate_vol_pairs):
 		i = 1
-		self.ser.write('RESET\x0D')
+		self.ser.write('RESET\x0D'.encode())
 		for pair in rate_vol_pairs:
 			rate = rate_vol_pairs[0]
 			vol = rate_vol_pairs[1]
@@ -48,12 +48,13 @@ class Pump:
 			self.ser.write(phase.encode())
 			self.ser.write(fun_rat.encode())
 			self.ser.write(rate.encode())
-			self.ser.write(vol.encode())
+            self.ser.write(vol.encode())
+            self.ser.write('DIR WDR'.encode())
 			i = i+1
-		self.ser.write('RUN\x0D')
+		self.ser.write('RUN\x0D'.encode())
 
 	def Pause(self):
-		self.ser.write('STP\x0D')
+		self.ser.write('STP\x0D'.encode())
 
 	def Resume(self):
-		self.ser.write('RUN\x0D')
+		self.ser.write('RUN\x0D'.encode())
