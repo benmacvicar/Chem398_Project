@@ -62,6 +62,11 @@ class GUI:
 			mainloop()
 	
 	def destroyer(self):
+	
+		self.pump.sendCmd('STP\x0D')
+		self.pump.sendCmd('STP\x0D')
+		self.pump.sendCmd('RESET\x0D')
+		self.pump.sendCmd('CLD WDR\x0D')
 		self.pump.exit()
 		sys.exit()
 
@@ -92,7 +97,7 @@ class GUI:
 
 	def Start(self):
 		Run(self.pump,self.rate_vol_pairs,self.times,self.master)
-		master.destroy()
+		
 
 
 def Check(vol,vols):

@@ -1,12 +1,10 @@
-import pygame
-import pygame.camera
-from pygame.locals import *
+import cv2
+import sys
 
 def takePic(path,rate):
-	pygame.camera.init()
-	camlist = pygame.camera.list_cameras()
-	if camlist:
-		cam = pygame.camera.Camera(camlist[0])
-		cam.start()
-		im = cam.get_image()
-		pygame.image.save(img,path+"-"+rate+"\\"+".jpg")
+	cam = cv2.VideoCapture(0)
+	print(cam.isOpened())
+	a,im = cam.read()
+
+	cv2.imwrite(path +"\\"+f"rate_number_{rate}"+".png",im)
+

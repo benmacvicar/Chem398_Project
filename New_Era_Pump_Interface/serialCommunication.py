@@ -25,15 +25,17 @@ class Pump:
 			self.status = False
 		else:
 			self.ser = ser
-			self.ser.write()
+			
 			self.status = ser.isOpen()
-			#maybe change baud rate here??
+			#maybe change baud rate here
+			#self.ser.write()
 
 	def sendCmd(self,cmd):
 
 
-		self.ser.write(cmd.encode)
+		self.ser.write(cmd.encode())
 		output = self.ser.readline()
+		print(output)
 
 	def exit(self):
 		self.ser.close()
@@ -55,6 +57,8 @@ class Pump:
 			phase = f'PHN {i}\x0D'
 			rate_cmd = f'RAT {rate} MM\x0D'
 			vol_cmd = f'VOL{vol}\x0D'
+			print((rate_cmd,vol_cmd))
+			self.sendCmd('CLD WDR\x0D')
 			self.sendCmd(phase)
 			self.sendCmd(fun_rat)
 			self.sendCmd(rate_cmd)
@@ -65,10 +69,6 @@ class Pump:
 
 		self.sendCmd('RUN\x0D')
 
-
-			print(f"loop{i}")
-		self.ser.write('RUN\x0D'.encode())
-		print('ran')
 	def Pause(self):
 		self.sendCmd('STP\x0D')
 

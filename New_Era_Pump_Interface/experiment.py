@@ -11,6 +11,7 @@ class Timer:
 		#Check file path and make directories
 		self.path = "C:\\Users\\dkhlab\\Documents\\Experiments"+"\\"+time.asctime().replace(":","-")
 		self.pump = pump
+		self.times = times
 		self.rate_vol_pairs =rate_vol_pairs
 		self.pump.sendRun(self.rate_vol_pairs)
 		self.root.geometry("400x200")
@@ -39,7 +40,7 @@ class Timer:
 		if self.on:
 			self.elapsed_time =  time.time() - self.start_time - timePaused
 			t = self.elapsed_time
-			self.m = round(t/60)
+			self.m = int(t/60)
 			self.s = round(t%60)
 			if round(t) in self.times:
 				takePic(self.path,self.count)
