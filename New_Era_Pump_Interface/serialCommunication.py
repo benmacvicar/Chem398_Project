@@ -18,14 +18,19 @@ class Pump:
 		
 		self.port = "COM%d" % portNumber
 		try:
-			ser = serial.Serial(self.port, 9600, timeout = .5)
+			ser = serial.Serial(self.port, 9600)
 		except:
 			self.status = False
 		else:
 			self.ser = ser
+			self.ser.write()
 			self.status = ser.isOpen()
+			#maybe change baud rate here??
 
+	def sendCmd(self,cmd):
 
+		self.ser.write(cmd.encode)
+		output = self.ser.readline()
 
 	def checkConnection(self):
 		return self.status
@@ -45,17 +50,17 @@ class Pump:
 			phase = f'PHN {i}\x0D'
 			rate_cmd = f'RAT {rate} MM\x0D'
 			vol_cmd = f'VOL{vol}\x0D'
-			self.ser.write(phase.encode())
-			self.ser.write(fun_rat.encode())
-			self.ser.write(rate_cmd.encode())
-			self.ser.write('VOLMM\x0D'.encode())
-			self.ser.write(vol_cmd.encode())
-			self.ser.write('DIR WDR'.encode())
+			self.sendCmd(phase)
+			self.sendCmd(fun_rat)
+			self.sendCmd(rate_cmd)
+			self.sendCmd('VOLMM\x0D')
+			self.sendCmd(vol_cmd)
+			self.sendCmd('DIR WDR\x0D')
 			i = i+1
-		self.ser.write('RUN\x0D'.encode())
+		self.sendCmd('RUN\x0D')
 
 	def Pause(self):
-		self.ser.write('STP\x0D'.encode())
+		self.sendCmd('STP\x0D')
 
 	def Resume(self):
-		self.ser.write('RUN\x0D'.encode())
+		self.sendCmd('RUN\x0D')

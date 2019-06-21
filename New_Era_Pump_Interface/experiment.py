@@ -20,7 +20,8 @@ class Timer:
 		self.pause_time = 0
 		self.resume_time = None
 		self.m = 0
-		self.s = 0       
+		self.s = 0
+		self.count = 0       
 		self.label = Label(self.root,text="", font=("Helvetica 35 bold"))
 		q=Button(self.root , text='Close Window', command=self.root.destroy)
 		pb=Button(self.root , text='Pause Experiment', command=self.Pause)
@@ -37,8 +38,11 @@ class Timer:
 		if self.on:
 			self.elapsed_time =  time.time() - self.start_time - timePaused
 			t = self.elapsed_time
-			self.m = int(t/60)
-			self.s = int(t%60)
+			self.m = round(t/60)
+			self.s = round(t%60)
+			if round(t) in self.times:
+				takePic(self.path,self.count)
+				self.count += 1
 			if self.s <10:
 				txt = f"{self.m}:0{self.s}"
 			else:
