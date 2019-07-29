@@ -14,7 +14,8 @@ class GUI:
 
 
 	def __init__(self,pump = None):
-
+		
+		self.units = "MM"
 		self.master = Tk()
 		self.master.withdraw()
 		self.master.wm_title("Pump Application")
@@ -38,6 +39,10 @@ class GUI:
 			volumeInput = Entry(self.master)
 			self.volumeInput = volumeInput
 			volumeInput.grid(row=0,column=1)
+			mm = Button(self.master, text ="MM",command=self.setMM)
+			um = Button(self.masterm text = "UM", command = self.setUM)
+			mm.grid(row=0,column =2)
+			um.grid(row = 0, column = 3)
 			for i in range(num):
 				n=i+1
 				Label(self.master, text="Flow Rate %d (ml/min):" % n).grid(row = 2*i+1,column=0)
@@ -61,6 +66,12 @@ class GUI:
 			self.master.deiconify()
 			mainloop()
 	
+	def setMM(self):
+		self.units = 'MM'
+
+	def setUM(self):
+		self.untis = 'UM'
+
 	def destroyer(self):
 	
 		self.pump.sendCmd('STP\x0D')
@@ -96,7 +107,7 @@ class GUI:
 		Graph(self)
 
 	def Start(self):
-		Run(self.pump,self.rate_vol_pairs,self.times,self.master)
+		Run(self.pump,self.rate_vol_pairs,self.times,self.master,self.units)
 		
 
 

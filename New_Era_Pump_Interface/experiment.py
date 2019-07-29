@@ -6,14 +6,15 @@ import time
 import os
 
 class Timer:
-	def __init__(self,pump,rate_vol_pairs,times,master):
+	def __init__(self,pump,rate_vol_pairs,times,master,units):
 		self.root = Toplevel(master)
 		#Check file path and make directories
 		self.path = "C:\\Users\\dkhlab\\Documents\\Experiments"+"\\"+time.asctime().replace(":","-")
 		self.pump = pump
+		self.units = units
 		self.times = times
 		self.rate_vol_pairs =rate_vol_pairs
-		self.pump.sendRun(self.rate_vol_pairs)
+		self.pump.sendRun(self.rate_vol_pairs,units)
 		self.root.geometry("400x200")
 		self.start_time = time.time()
 		self.on = True
@@ -64,6 +65,6 @@ class Timer:
 			timePaused = time.time()- self.pause_time
 			self.Update(timePaused)
 			self.pump.Resume()
-def Run(pump,rate_vol_pairs,times,master):
+def Run(pump,rate_vol_pairs,times,masterk,units):
 
-	timer = Timer(pump,rate_vol_pairs,times,master)
+	timer = Timer(pump,rate_vol_pairs,times,master,units)
