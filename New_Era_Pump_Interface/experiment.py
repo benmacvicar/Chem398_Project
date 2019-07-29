@@ -7,6 +7,7 @@ import os
 
 class Timer:
 	def __init__(self,pump,rate_vol_pairs,times,master,units):
+		
 		self.root = Toplevel(master)
 		#Check file path and make directories
 		self.path = "C:\\Users\\dkhlab\\Documents\\Experiments"+"\\"+time.asctime().replace(":","-")
@@ -65,6 +66,6 @@ class Timer:
 			timePaused = time.time()- self.pause_time
 			self.Update(timePaused)
 			self.pump.Resume()
-def Run(pump,rate_vol_pairs,times,masterk,units):
+def Run(pump,rate_vol_pairs,times,master,units):
 
 	timer = Timer(pump,rate_vol_pairs,times,master,units)

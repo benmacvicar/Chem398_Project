@@ -35,17 +35,17 @@ class GUI:
 		if answer is not None:
 			num = answer
 		
-			Label(self.master, text = "Total Experiment Volume (ml):").grid(row=0,column=0)
+			Label(self.master, text = f"Total Experiment Volume (select units->):").grid(row=0,column=0)
 			volumeInput = Entry(self.master)
 			self.volumeInput = volumeInput
 			volumeInput.grid(row=0,column=1)
-			mm = Button(self.master, text ="MM",command=self.setMM)
-			um = Button(self.masterm text = "UM", command = self.setUM)
+			mm = Button(self.master, text ="mm",command=self.setMM)
+			um = Button(self.master, text = "um", command = self.setUM)
 			mm.grid(row=0,column =2)
 			um.grid(row = 0, column = 3)
 			for i in range(num):
 				n=i+1
-				Label(self.master, text="Flow Rate %d (ml/min):" % n).grid(row = 2*i+1,column=0)
+				Label(self.master, text=f"Flow Rate {n} (units/min):").grid(row = 2*i+1,column=0)
 				Label(self.master, text="Length (s):").grid(row = 2*i+1,column=2)
 
 				e1 = Entry(self.master)	 
@@ -70,7 +70,7 @@ class GUI:
 		self.units = 'MM'
 
 	def setUM(self):
-		self.untis = 'UM'
+		self.units = 'UM'
 
 	def destroyer(self):
 	
@@ -140,9 +140,9 @@ def Graph(gui):
 	if num[0] == 0:
 		msg = "Info: The total volume will be used."
 	elif num[0] ==1:
-		msg = "Info: There will be %dml left over after the run."%diff
+		msg = f"Info: There will be {diff}{gui.units} left over after the run."
 	elif num[0] ==2:
-		msg = "Error: The required volume exceeds the available volume by %dml"%diff
+		msg = f"Error: The required volume exceeds the available volume by {diff}{gui.units} "
 	
 	gr = Toplevel(gui.master)
 	gr.wm_title("Graph")
@@ -162,7 +162,7 @@ def Graph(gui):
 		sub = f.add_subplot(111)
 		sub.plot(x, y, linestyle='-', drawstyle='steps')
 		sub.set_xlabel("Time (s)")
-		sub.set_ylabel("Flow Rate (ml/min)")
+		sub.set_ylabel(f"Flow Rate ({gui.units}/min)")
 		sub.set_xlim([0,t])
 		canvas = FigureCanvasTkAgg(f, master=gr)
 		canvas.draw()
