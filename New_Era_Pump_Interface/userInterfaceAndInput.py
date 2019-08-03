@@ -9,13 +9,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from serialCommunication import Pump
 
-
+#The GUI class handles the display of the UI and the input of data by the user
 class GUI:
 
 
 	def __init__(self,pump = None):
 		
 		self.units = "MM"
+		self.units_for_display = 'ml'
 		self.master = Tk()
 		self.master.withdraw()
 		self.master.wm_title("Pump Application")
@@ -32,6 +33,8 @@ class GUI:
 		self.run = False
 		self.times = list()
 		self.rate_vol_pairs = list()
+		
+		#This loop constructs a number flow rate input boxes as specified by the previous input  
 		if answer is not None:
 			num = answer
 		
@@ -43,6 +46,7 @@ class GUI:
 			um = Button(self.master, text = "um", command = self.setUM)
 			mm.grid(row=0,column =2)
 			um.grid(row = 0, column = 3)
+
 			for i in range(num):
 				n=i+1
 				Label(self.master, text=f"Flow Rate {n} (units/min):").grid(row = 2*i+1,column=0)
@@ -66,12 +70,17 @@ class GUI:
 			self.master.deiconify()
 			mainloop()
 	
+	#Set units to ml
 	def setMM(self):
 		self.units = 'MM'
+		self.units_for_display = 'ml'
 
+	#Set units to ul
 	def setUM(self):
 		self.units = 'UM'
-
+		self.units_for_display = 'ul'
+	
+	#quits program and closes pump 
 	def destroyer(self):
 	
 		self.pump.sendCmd('STP\x0D')
@@ -81,6 +90,8 @@ class GUI:
 		self.pump.exit()
 		sys.exit()
 
+	#Handles the processing of user input data into arrays of usable formats
+	#Then calls the graph method
 	def Show(self):
 		volume = float(self.volumeInput.get())
 		rate_time_pairs=list()
@@ -106,11 +117,12 @@ class GUI:
 		print(self.rate_vol_pairs)
 		Graph(self)
 
+	#Begins the experiment Run
 	def Start(self):
 		Run(self.pump,self.rate_vol_pairs,self.times,self.master,self.units)
 		
 
-
+#Compares the volume required by the run profile to the total volume specified
 def Check(vol,vols):
 
 	total = 0
@@ -131,7 +143,7 @@ def Check(vol,vols):
 		diff = vol - total
 		return (1,diff)
 
-
+#Creats a graph illustrating the run and provides the UI elements that start the run
 def Graph(gui):
 	
 	num,rt,vt = gui.result,gui.rate_time_pairs, gui.volume_time_pairs
@@ -140,9 +152,9 @@ def Graph(gui):
 	if num[0] == 0:
 		msg = "Info: The total volume will be used."
 	elif num[0] ==1:
-		msg = f"Info: There will be {diff}{gui.units} left over after the run."
+		msg = f"Info: There will be {diff}{gui.units_for_display} left over after the run."
 	elif num[0] ==2:
-		msg = f"Error: The required volume exceeds the available volume by {diff}{gui.units} "
+		msg = f"Error: The required volume exceeds the available volume by {diff}{gui.units_for_display} "
 	
 	gr = Toplevel(gui.master)
 	gr.wm_title("Graph")
@@ -162,13 +174,14 @@ def Graph(gui):
 		sub = f.add_subplot(111)
 		sub.plot(x, y, linestyle='-', drawstyle='steps')
 		sub.set_xlabel("Time (s)")
-		sub.set_ylabel(f"Flow Rate ({gui.units}/min)")
+		sub.set_ylabel(f"Flow Rate ({gui.units_for_display}/min)")
 		sub.set_xlim([0,t])
 		canvas = FigureCanvasTkAgg(f, master=gr)
 		canvas.draw()
 		canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
 		canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=True)
 	B2 = Button(gr, text="Close", command = gr.destroy)
+	
 	#B3 starts timer and runs experiment
 	B3 = Button(gr,text = "Run Experiment", command = gui.Start)
 	B3.pack()

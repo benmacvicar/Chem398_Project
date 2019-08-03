@@ -1,17 +1,22 @@
+#This file handles all communications with the Syringe Pump via rs232
 import serial
 from tkinter import Tk
 from tkinter import simpledialog
 from tkinter import messagebox
 
+#This function recieves user input indicating the port the pump is connected to
 def getPort():
 	root = Tk()
 	root.withdraw()
 	num = simpledialog.askinteger("Input", "What port number is the pump connected to (default is 4)",parent = root)
 	return num,root
 
+#This function destroys the UI element associated with getPort()
 def destroyPrompt(root):
 	root.destroy
 
+
+#The Pump class handles communication to a connected pump via rs232
 class Pump:
 	
 	def __init__(self, portNumber):
@@ -27,27 +32,33 @@ class Pump:
 			self.ser = ser
 			
 			self.status = ser.isOpen()
-			#maybe change baud rate here
-			#self.ser.write()
+			
 
+#Takes text for pump commands and sneds to the pump
+#Input: Formated command for syringe pump
 	def sendCmd(self,cmd):
-
-
 		self.ser.write(cmd.encode())
 		output = self.ser.readline()
 		print(output)
 
+#Closes COM port that the pump is attached to
 	def exit(self):
 		self.ser.close()
 
+#Checks if the pump object is connected
 	def checkConnection(self):
 		return self.status
 
+#Error message for disconnected pump
 	def errorMessage(self):
 		root = Tk()
 		root.withdraw()
 		messagebox.showerror("Error", "Unable to connect to device, check port number in device mangager and try again.")
-		
+
+#Programs and starts the pump with a given experimental profile
+#Input 1: a list of tuples of the form (rate to dispense at, volume to dispense)
+#Input 2: units either ml or ul
+
 	def sendRun(self,rate_vol_pairs,units):
 		i = 1
 		u = units
@@ -69,9 +80,10 @@ class Pump:
 			i = i+1
 
 		self.sendCmd('RUN\x0D')
-
+#Pauses Run
 	def Pause(self):
 		self.sendCmd('STP\x0D')
 
+#Resumes Run
 	def Resume(self):
 		self.sendCmd('RUN\x0D')

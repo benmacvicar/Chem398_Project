@@ -1,16 +1,18 @@
 from serialCommunication import Pump
-from cameraControl import takePic
+from cameraControl import Video
 from tkinter import Toplevel
 from tkinter import *
 import time
 import os
 
+#This class creates the UI associated with the Time as well as realtime control of the experiment
 class Timer:
 	def __init__(self,pump,rate_vol_pairs,times,master,units):
 		
 		self.root = Toplevel(master)
 		#Check file path and make directories
 		self.path = "C:\\Users\\dkhlab\\Documents\\Experiments"+"\\"+time.asctime().replace(":","-")
+		
 		self.pump = pump
 		self.units = units
 		self.times = times
@@ -35,8 +37,11 @@ class Timer:
 		rb.place(x=150,y=100)
 		q.place(x=300,y=100)
 		os.mkdir(self.path)
+		self.vid = Video(self.path)
 		self.Update()
 		self.root.mainloop()
+	
+	#Updates the displayed timer
 	def Update(self,timePaused=0):
 		
 		if self.on:
@@ -45,7 +50,7 @@ class Timer:
 			self.m = int(t/60)
 			self.s = round(t%60)
 			if round(t) in self.times:
-				takePic(self.path,self.count)
+				#takePic(self.path,self.count)
 				self.count += 1
 			if self.s <10:
 				txt = f"{self.m}:0{self.s}"
@@ -53,12 +58,14 @@ class Timer:
 				txt = f"{self.m}:{self.s}"
 			self.label.configure(text=txt)
 			self.root.after(1000,self.Update)
-
+	
+	#Pauses Timer
 	def Pause(self):
 		self.on = False
 		self.pause_time = time.time()
 		self.pump.Pause()
-		takePic()
+		self.vid.pause()
+	#Resumes Timer
 	def Resume(self):
 		
 		if self.on is False:
@@ -66,6 +73,9 @@ class Timer:
 			timePaused = time.time()- self.pause_time
 			self.Update(timePaused)
 			self.pump.Resume()
-def Run(pump,rate_vol_pairs,times,master,units):
+			self.vid.play()
 
+#Starts a run of the experiment and creates an associated timer and video object
+def Run(pump,rate_vol_pairs,times,master,units):
 	timer = Timer(pump,rate_vol_pairs,times,master,units)
+	timer.vid.play()
