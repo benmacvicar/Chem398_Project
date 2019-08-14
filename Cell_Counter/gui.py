@@ -29,6 +29,8 @@ class GUI:
 		self.areas = list ()
 		self.times = list()
 		self.rate_vol_pairs = list()
+		self.hyst_inputs = list()
+		self.hyst_vals = list()
 		if answer is not None:
 			num = answer
 		
@@ -45,6 +47,17 @@ class GUI:
 			e4.insert(100, "100 ")
 			e3.grid(row=0, column=3)
 			e4.grid(row=0, column=5)
+
+			Label(self.master, text="Min Hysteresis").grid(row = 0,column=6)
+			Label(self.master, text="Max Hysteresis").grid(row = 0,column=8)
+			e5 = Entry(self.master)
+			e5.insert(15, "75 ")
+			e6 = Entry(self.master)
+			e6.insert(100, "100 ")
+			e5.grid(row=0, column=7)
+			e6.grid(row=0, column=9)
+			self.hyst_inputs.append(e5)
+			self.hyst_inputs.append(e6)
 			for i in range(num):
 				n=i+1
 				Label(self.master, text="Flow Rate %d (Optional):" % n).grid(row = 2*i+1,column=0)
@@ -55,7 +68,7 @@ class GUI:
 				e2 = Entry(self.master)
 				
 				
-				show = Button(self.master, text ='Show',command = lambda: self.graph(i)) 
+				show = Button(self.master, text ='Show',command = lambda n=n: self.graph(n)) 
 				
 				e1.grid(row=2*i+1, column=1)
 				e2.grid(row=2*i+1, column=3)
@@ -86,9 +99,9 @@ class GUI:
 
 	#Displays the image with found contours
 	def graph(self,num):
-
+		
 		pic = self.pics[num]
-		showPics(pic)
+		showPics(pic,self.rate_time_pairs,self.area_inputs[0][0],self.area_inputs[0][1],self.hyst_vals)
 
 	#Implements the image analyis base on the user input
 	def Analyze(self):
@@ -97,19 +110,22 @@ class GUI:
 		rate_time_pairs.append((0.0,0.0))
 		run_time = 0
 		self.times.append(0)
-
-		for item in self.area_inputs:
-			areas.append((float(item[0].get()),float(item[1].get())))
-		self.areas.insert(0,self.areas[0])
+		self.area_inputs = list()
+		for item in self.areas:
+			self.area_inputs.append((float(item[0].get()),float(item[1].get())))
+		self.hyst_vals = list()
+		for item in self.hyst_inputs:
+			self.hyst_vals.append(float(item.get()))
+		#print(self.hyst_vals)
 		for item in self.inputs:
 			flowRate = float(item[0].get())
 			time = float(item[1].get())
 			run_time = run_time + time 
-			rate_time_pairs.append((flowRate,run_time))
-			
+			rate_time_pairs.append((flowRate,time))
+			print(rate_time_pairs)
 
 		self.rate_time_pairs = rate_time_pairs
 		
-		self.pics = run(self.filename,self.rate_time_pairs)
+		self.pics = run(self.filename,self.rate_time_pairs,self.area_inputs[0][0],self.area_inputs[0][1],self.hyst_vals)
 
 

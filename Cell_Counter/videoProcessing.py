@@ -33,12 +33,12 @@ def getFrames(filename,rate_time_pairs):
 #prints the number of cells that are the same between each frame
 #Input: list of images
 #Input: List of tuples of flow rates and end times
-def analizeFrames(pics,rate_time_pairs):
+def analizeFrames(pics,rate_time_pairs,mi,ma,minh):
 	cells = list()
 	intersections = list()
 	cents = list()
 	for pic in pics:
-		im = Image(pic,rate_time_pairs)
+		im = Image(pic,rate_time_pairs,mi,ma,minh)
 		num = im.count()
 		cells.append(num)
 		cents.append(im.centroids)
@@ -60,15 +60,15 @@ def dist(p1,p2):
 	 return np.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)
 
 #excecutes getFrames then analyzeFrames
-def run(filename,rate_time_pairs):
+def run(filename,rate_time_pairs,mina,maxa,minh):
 
 	pics = getFrames(filename,rate_time_pairs)
-	analizeFrames(pics,rate_time_pairs)
+	analizeFrames(pics,rate_time_pairs,mina,maxa,minh)
 	return pics
 
 #Shows the image with detected cells outlined
-def showPics(pic):
-	im = Image(pic)
+def showPics(pic,ls,mina,maxa,minh):
+	im = Image(pic,ls,mina,maxa,minh)
 	im.showContours()
 
 

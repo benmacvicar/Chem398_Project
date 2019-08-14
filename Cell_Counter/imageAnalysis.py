@@ -4,14 +4,16 @@ import cv2
 #The Image class takes an image and counts the number of cells in it
 class Image:
 		
-	def __init__(self, im, rate_time_pairs = None):
+	def __init__(self, im, rate_time_pairs,mina,maxa,minh):
 		self.im = im
-
+		self.mina = mina
+		self.maxa = maxa
+		print(minh)
 		raw_image = im[1]
 		grayscale_image = cv2.cvtColor(raw_image, cv2.COLOR_BGR2GRAY)
 		blurred_image = cv2.GaussianBlur(grayscale_image, (5, 5), 0)
 		kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(5,5))
-		canny_image = cv2.Canny(blurred_image, 75, 100)
+		canny_image = cv2.Canny(blurred_image, minh[0], minh[1])
 		dilate_image = cv2.dilate(canny_image, kernel, iterations=1)
 		eroded_image = cv2.erode(dilate_image, kernel, iterations=1)
 
@@ -32,7 +34,7 @@ class Image:
 			
 			
 
-			if cv2.contourArea(c) > min_area and cv2.contourArea(c)< max_area	:
+			if cv2.contourArea(c) > self.mina and cv2.contourArea(c)< self.maxa:
 				hull = cv2.convexHull(c)
 				cv2.drawContours(temp_image,[hull],-1,(0,0,255),1)
 				
@@ -57,7 +59,7 @@ class Image:
 		temp_image = self.final_image
 		for c in self.contours:
 
-			if cv2.contourArea(c) > min_area and cv2.contourArea(c)< max_area	:
+			if cv2.contourArea(c) > self.mina and cv2.contourArea(c)< self.maxa:
 				M = cv2.moments(c)
 				num = num + 1
 				total_area = total_area + cv2.contourArea(c)
